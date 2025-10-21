@@ -1,11 +1,13 @@
 import React from "react"
-const BeerCard: React.FC<{img_src:string,title:string,price:number,inStock:boolean}> = ({img_src,title,price,inStock}) => {
+import type { Beer } from "../App"
+const BeerCard: React.FC<{beer:Beer,addToCard:(beers:any)=>void}> = ({addToCard,beer}) => {
   return (
     <div className='beerCard'>
-      <img src={img_src} alt={title} />
-      <h2><b>{title}</b></h2>
-      <p>{price} Ft</p>
-      <h3 className={inStock ? "available" : "notAvailable"}>{inStock ? "Raktáron" : "Nincs raktáron"}</h3>
+      <img src={beer.image} alt={beer.name} />
+      <h2><strong>{beer.name}</strong></h2>
+      <p>{beer.price} Ft</p>
+      <h3 className={beer.available ? "available" : "notAvailable"}><strong>{beer.available ? "Raktáron" : "Nincs raktáron"}</strong></h3>
+      <button onClick={()=>addToCard(beer)}>Kosárba!</button>
     </div>
   )
 }

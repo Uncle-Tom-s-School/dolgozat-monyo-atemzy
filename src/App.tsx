@@ -1,15 +1,21 @@
 import { useEffect, useState } from "react"
 import BeerCard from "./components/BeerCard"
+import Cart from "./components/Cart"
 
-interface Beer {
+export interface Beer {
   name:string,
   image:string,
   price:number,
   available:boolean
 }
 
+export interface CartItem extends Beer {
+  amount:number
+}
+
 const App = () => {
   const [data,setData] = useState<Beer[]>([])
+  const [cart,setCart] = useState<CartItem[]>([])
 
   useEffect(()=>{
     fetch("/data.json").then(res=>res.json())
@@ -18,10 +24,23 @@ const App = () => {
     })
   },[])
 
+  const addToCard = (beer:Beer) => {
+    const id = cart.findIndex(element=>element.name == beer.name)
+    if(id != -1){
+      cart[id].amount += 1
+      setCart(cart)
+    }else{
+      setCart(prev=>[...prev,{...beer,amount:1}])
+    }
+  }
+
   return (
-    <div className="beerCardWrapper">
-      {data.map((beer,id)=><BeerCard key={id} title={beer.name} price={beer.price} img_src={beer.image} inStock={beer.available} />)}
-    </div>
+    <>
+      <Cart cart={cart} />
+      <div className="beerCardWrapper">
+        {data.map((beer,id)=><BeerCard addToCard={addToCard} key={id} beer={beer} />)}
+      </div>
+    </>
   )
 }
 
