@@ -24,21 +24,26 @@ const App = () => {
     })
   },[])
 
-  const addToCard = (beer:Beer) => {
+  const addToCart = (beer:Beer) => {
     const id = cart.findIndex(element=>element.name == beer.name)
     if(id != -1){
       cart[id].amount += 1
-      setCart(cart)
+      setCart(JSON.parse(JSON.stringify(cart)))
     }else{
       setCart(prev=>[...prev,{...beer,amount:1}])
     }
   }
 
+  const removeFromCart = (beer:CartItem) => {
+    cart.splice(cart.findIndex(item=>item.name==beer.name),1)
+    setCart(JSON.parse(JSON.stringify(cart)))
+  }
+
   return (
     <>
-      <Cart cart={cart} />
+      <Cart cart={cart} removeFromCart={removeFromCart} />
       <div className="beerCardWrapper">
-        {data.map((beer,id)=><BeerCard addToCard={addToCard} key={id} beer={beer} />)}
+        {data.map((beer,id)=><BeerCard addToCard={addToCart} key={id} beer={beer} />)}
       </div>
     </>
   )

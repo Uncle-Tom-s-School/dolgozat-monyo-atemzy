@@ -7,7 +7,7 @@ const BeerCard: React.FC<{beer:Beer,addToCard:(beers:any)=>void}> = ({addToCard,
       <h2><strong>{beer.name}</strong></h2>
       <p>{beer.price} Ft</p>
       <h3 className={beer.available ? "available" : "notAvailable"}><strong>{beer.available ? "Raktáron" : "Nincs raktáron"}</strong></h3>
-      <button onClick={()=>addToCard(beer)}>Kosárba!</button>
+      <button disabled={!beer.available} onClick={()=>addToCard(beer)}>Kosárba!</button>
     </div>
   )
 }
